@@ -81,8 +81,6 @@ For a standard Windows XAMPP installation, place the project folder inside:
 
 ```text
 C:\xampp
-
-
 ## 📸 Project Screenshots
 
 ### Admin Dashboard
