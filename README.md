@@ -81,3 +81,10 @@ For a standard Windows XAMPP installation, place the project folder inside:
 
 ```text
 C:\xampp
+
+
+## 📸 Project Screenshots
+
+### Admin Dashboard
+
+![SmartCanteen AI Screenshot](screenshots/Screenshot%202026-10-22%20001149.png)
