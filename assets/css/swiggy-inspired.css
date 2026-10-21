@@ -1,0 +1,123 @@
+/* SmartCanteen AI — premium food-delivery inspired UI
+   Visual direction: clean white canvas, orange primary, compact navigation,
+   generous whitespace, strong food imagery, subtle borders/shadows.
+*/
+:root{
+ --sc-orange:#ff5200;
+ --sc-orange-dark:#e64400;
+ --sc-ink:#282c3f;
+ --sc-muted:#686b78;
+ --sc-bg:#fff;
+ --sc-soft:#f7f7f7;
+ --sc-line:#e9e9ee;
+ --sc-green:#1ba672;
+ --sc-yellow:#ffb000;
+ --sc-shadow:0 4px 16px rgba(40,44,63,.08);
+ --sc-shadow-lg:0 10px 32px rgba(40,44,63,.12);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body.sc-app{margin:0;background:#fff;color:var(--sc-ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+body.sc-app a{color:inherit}
+body.sc-app .navbar{position:fixed;top:0;left:0;right:0;z-index:1050;height:80px;background:#fff!important;border:0!important;box-shadow:0 4px 16px rgba(40,44,63,.08);padding:0!important}
+body.sc-app .navbar>.container-fluid{max-width:1240px;height:80px;margin:auto;padding-left:20px!important;padding-right:20px!important}
+body.sc-app .navbar-brand{height:80px;color:var(--sc-ink)!important;font-weight:800;letter-spacing:-.045em;font-size:20px;display:flex;align-items:center;gap:10px;white-space:nowrap}
+body.sc-app .navbar-brand i{width:42px;height:42px;display:grid;place-items:center;color:#fff!important;background:var(--sc-orange);border-radius:10px;padding:0!important;font-size:21px}
+body.sc-app .navbar-toggler{color:var(--sc-ink)!important}
+body.sc-app .navbar .btn{background:transparent;border:0;color:var(--sc-ink);font-weight:600;box-shadow:none;padding:10px 12px;border-radius:0;position:relative}
+body.sc-app .navbar .btn:hover{color:#111;background:#fafafa;transform:none}
+body.sc-app .navbar .btn-primary{color:var(--sc-orange)!important;background:transparent!important;box-shadow:none!important}
+body.sc-app .navbar .btn-primary:hover{background:#fff5ef!important}
+body.sc-app .navbar .btn-primary:after{content:"";position:absolute;left:12px;right:12px;bottom:2px;height:2px;background:var(--sc-orange);transform:scaleX(0);transition:.2s}
+body.sc-app .navbar .btn-primary:hover:after{transform:scaleX(1)}
+body.sc-app .navbar .text-end{line-height:1.15}
+body.sc-app .navbar .text-end .small:first-child{color:var(--sc-ink)!important}
+body.sc-app .navbar .text-end .small:last-child{color:var(--sc-muted)!important}
+body.sc-app .navbar .rounded-circle{background:#fff3ed!important;color:var(--sc-orange)!important;border:1px solid #ffe0d0}
+body.sc-app .navbar .btn-outline-secondary{border:0!important;color:var(--sc-ink)!important;background:transparent!important}
+body.sc-app .navbar .btn-outline-secondary:hover{color:var(--sc-orange)!important;background:#fff5ef!important}
+body.sc-app .page-shell{max-width:1240px!important;margin:0 auto!important;min-height:calc(100vh - 80px);padding:108px 20px 52px!important}
+body.sc-app footer{max-width:1240px;margin:0 auto;padding:0 20px 28px!important}
+body.sc-app footer>div{border-top:1px solid var(--sc-line)!important;padding-top:20px!important;color:var(--sc-muted)!important}
+/* global surfaces */
+body.sc-app .card{background:#fff!important;border:1px solid var(--sc-line)!important;border-radius:12px!important;box-shadow:var(--sc-shadow)!important;overflow:hidden;backdrop-filter:none!important}
+body.sc-app .card:hover{box-shadow:var(--sc-shadow-lg)!important}
+body.sc-app .card-header{background:#fff!important;border-bottom:1px solid var(--sc-line)!important;color:var(--sc-ink)}
+body.sc-app .card-footer{background:#fff!important;border-top:1px solid var(--sc-line)!important}
+body.sc-app .btn{border-radius:8px;font-weight:700;padding:.62rem 1rem;transition:transform .15s,box-shadow .15s,background .15s}
+body.sc-app .btn-primary{background:var(--sc-orange)!important;border-color:var(--sc-orange)!important;color:#fff!important;box-shadow:0 4px 10px rgba(255,82,0,.16)!important}
+body.sc-app .btn-primary:hover{background:var(--sc-orange-dark)!important;border-color:var(--sc-orange-dark)!important;transform:translateY(-1px);box-shadow:0 7px 15px rgba(255,82,0,.2)!important}
+body.sc-app .btn-outline-primary{color:var(--sc-orange)!important;border-color:#ffd0bc!important;background:#fff!important}
+body.sc-app .btn-outline-primary:hover{background:#fff5ef!important;border-color:#ffb99c!important;color:var(--sc-orange-dark)!important}
+body.sc-app .btn-success{background:var(--sc-green)!important;border-color:var(--sc-green)!important}
+body.sc-app .form-control,body.sc-app .form-select{min-height:44px;border:1px solid #d9dbe2;border-radius:8px;background:#fff;padding:.62rem .78rem;color:var(--sc-ink)}
+body.sc-app .form-control:focus,body.sc-app .form-select:focus{border-color:#ff9a73;box-shadow:0 0 0 3px rgba(255,82,0,.08)}
+body.sc-app .form-label{font-size:13px;font-weight:700;color:var(--sc-ink);margin-bottom:7px}
+body.sc-app .table{--bs-table-bg:transparent;color:var(--sc-ink)}
+body.sc-app .table thead th{background:#fafafa;color:#686b78;border-bottom:1px solid var(--sc-line);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:800}
+body.sc-app .table tbody td{border-color:#f0f0f3;vertical-align:middle}
+body.sc-app .table tbody tr:hover{background:#fffaf7}
+body.sc-app .badge{border-radius:5px;padding:.4em .65em;font-weight:700}
+body.sc-app .text-primary{color:var(--sc-orange)!important}
+body.sc-app .text-secondary{color:var(--sc-muted)!important}
+body.sc-app .bg-primary{background:var(--sc-orange)!important}
+body.sc-app .alert{border-radius:8px;box-shadow:none}
+/* page headings */
+body.sc-app h1,body.sc-app h2,body.sc-app h3,body.sc-app h4,body.sc-app h5{color:var(--sc-ink);font-weight:800;letter-spacing:-.025em}
+body.sc-app .page-title-premium{font-weight:800;letter-spacing:-.04em}
+body.sc-app .section-kicker{color:var(--sc-orange)!important;font-size:12px;text-transform:uppercase;letter-spacing:.09em;font-weight:800}
+/* food-delivery style hero */
+body.sc-app .premium-hero{position:relative;overflow:hidden;border-radius:0;background:#1e1f2b;color:#fff;min-height:220px;padding:42px 42px;margin-bottom:28px;box-shadow:none}
+body.sc-app .premium-hero::after{background:linear-gradient(90deg,rgba(20,21,30,.96),rgba(20,21,30,.78) 45%,rgba(20,21,30,.28)),url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=85');background-size:cover;background-position:center;opacity:1}
+body.sc-app .premium-hero h1{font-size:clamp(30px,4vw,48px);font-weight:800;letter-spacing:-.045em}
+body.sc-app .premium-hero .accent{color:#ffb38f}
+/* KPI cards */
+body.sc-app .kpi-card{border-radius:10px!important}
+body.sc-app .kpi-card:after{background:rgba(255,82,0,.06)}
+body.sc-app .kpi-icon{background:#fff1ea;color:var(--sc-orange)}
+/* admin/analytics */
+body.sc-app .feature-card{border-radius:10px;background:#fff;border:1px solid var(--sc-line);padding:22px;transition:.18s}
+body.sc-app .feature-card:hover{transform:translateY(-2px);border-color:#ffd1bf;box-shadow:var(--sc-shadow-lg)}
+body.sc-app .feature-icon{background:#fff1ea;color:var(--sc-orange);border-radius:10px}
+body.sc-app .empty-state{padding:50px 20px;color:var(--sc-muted)}
+/* student menu — food grid */
+body.sc-app .sc-menu-toolbar{border:0!important;box-shadow:none!important;border-bottom:1px solid var(--sc-line)!important;border-radius:0!important;padding:0 0 18px!important;background:#fff!important}
+body.sc-app .sc-category-strip{display:flex;gap:10px;overflow:auto;padding:4px 0 18px;margin-bottom:18px;scrollbar-width:none}
+body.sc-app .sc-category-strip::-webkit-scrollbar{display:none}
+body.sc-app .sc-category-pill{flex:0 0 auto;border:1px solid var(--sc-line);border-radius:22px;padding:8px 15px;background:#fff;color:var(--sc-muted);text-decoration:none;font-weight:650}
+body.sc-app .sc-category-pill:hover,body.sc-app .sc-category-pill.active{background:#fff3ed;border-color:#ffb999;color:var(--sc-orange)}
+body.sc-app .sc-food-card{height:100%;border:0!important;box-shadow:none!important;border-radius:0!important;background:#fff!important;overflow:visible!important}
+body.sc-app .sc-food-card:hover{box-shadow:none!important}
+body.sc-app .sc-food-image{height:190px;border-radius:14px;background-size:cover;background-position:center;position:relative;overflow:hidden;background-color:#f2f2f2}
+body.sc-app .sc-food-image:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.16))}
+body.sc-app .sc-food-body{padding:12px 3px 0}
+body.sc-app .sc-food-title{font-size:18px;font-weight:800;margin:0 0 4px}
+body.sc-app .sc-food-desc{font-size:13px;color:var(--sc-muted);line-height:1.4;min-height:36px}
+body.sc-app .sc-food-meta{font-size:12px;color:#7a7d87}
+body.sc-app .sc-food-price{font-size:16px;font-weight:800;color:var(--sc-ink)}
+body.sc-app .sc-add-btn{min-width:92px;height:38px;padding:0 15px!important;border-radius:7px!important;background:#fff!important;color:var(--sc-orange)!important;border:1px solid #d7d8de!important;box-shadow:0 3px 8px rgba(40,44,63,.09)!important}
+body.sc-app .sc-add-btn:hover{border-color:var(--sc-orange)!important;background:#fff7f3!important;transform:none!important}
+/* checkout/cart/order layouts */
+body.sc-app .sc-sticky-summary{position:sticky;top:102px}
+body.sc-app .sc-order-status{font-size:12px;font-weight:800;letter-spacing:.02em}
+body.sc-app .sc-status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;background:var(--sc-orange)}
+/* AI/admin tools */
+body.sc-app .ai-feature-card{border:1px solid var(--sc-line)!important;border-radius:10px!important;background:#fff!important}
+body.sc-app .ai-feature-card:hover{border-color:#ffc2aa!important}
+body.sc-app .modal-content{border:0;border-radius:12px;box-shadow:0 20px 60px rgba(40,44,63,.2)}
+body.sc-app .modal-header{border-bottom:1px solid var(--sc-line)}
+/* mobile */
+@media(max-width:991.98px){
+ body.sc-app .navbar,body.sc-app .navbar>.container-fluid{height:auto;min-height:68px}
+ body.sc-app .navbar-brand{height:68px}
+ body.sc-app .page-shell{padding-top:92px!important}
+ body.sc-app .navbar-collapse{background:#fff;border-top:1px solid var(--sc-line);padding:10px 0 14px}
+ body.sc-app .navbar .btn{width:auto}
+ body.sc-app .premium-hero{padding:30px 24px;min-height:200px}
+ body.sc-app .sc-food-image{height:170px}
+}
+@media(max-width:575.98px){
+ body.sc-app .page-shell{padding-left:14px!important;padding-right:14px!important}
+ body.sc-app .premium-hero{margin-left:-14px;margin-right:-14px;border-radius:0;padding:28px 18px}
+ body.sc-app .sc-food-image{height:160px}
+}

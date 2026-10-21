@@ -1,0 +1,1 @@
+Copy the SmartCanteenAI folder contents into C:\xampp\htdocs\SmartCanteenAI and overwrite. Do NOT import schema.sql or seed.sql. This patch includes 30 local default food SVGs and preserves admin upload overrides.

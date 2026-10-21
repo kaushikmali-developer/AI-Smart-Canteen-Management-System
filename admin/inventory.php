@@ -1,0 +1,38 @@
+<?php
+declare(strict_types=1);
+require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/functions.php';
+require_role('ADMIN');
+$pageTitle='Inventory';
+
+if($_SERVER['REQUEST_METHOD']==='POST'){
+ if(!verify_csrf((string)($_POST['csrf_token']??''))){set_flash('error','Invalid security token.');redirect('/SmartCanteenAI/admin/inventory.php');}
+ try{
+  $action=(string)($_POST['action']??''); $id=(int)($_POST['inventory_id']??0);
+  if($action==='save'){
+   $name=trim((string)$_POST['ingredient_name']);$unit=trim((string)$_POST['unit']);$stock=(float)$_POST['current_stock'];$min=(float)$_POST['minimum_stock'];$max=(float)$_POST['maximum_stock'];$cost=(float)$_POST['cost_per_unit'];$supplier=(int)($_POST['supplier_id']??0)?:null;$active=isset($_POST['is_active'])?1:0;
+   if($name===''||$unit===''||$stock<0||$min<0||$max<0||$cost<0)throw new RuntimeException('Enter valid inventory details.');
+   if($id){$s=db()->prepare('UPDATE inventory SET ingredient_name=?,unit=?,current_stock=?,minimum_stock=?,maximum_stock=?,cost_per_unit=?,supplier_id=?,is_active=? WHERE inventory_id=?');$s->execute([$name,$unit,$stock,$min,$max,$cost,$supplier,$active,$id]);set_flash('success','Inventory item updated.');}
+   else{$s=db()->prepare('INSERT INTO inventory(ingredient_name,unit,current_stock,minimum_stock,maximum_stock,cost_per_unit,supplier_id,is_active) VALUES(?,?,?,?,?,?,?,?)');$s->execute([$name,$unit,$stock,$min,$max,$cost,$supplier,$active]);set_flash('success','Inventory item created.');}
+  }elseif($action==='adjust'){
+   $qty=(float)$_POST['quantity_change'];$note=trim((string)$_POST['notes']);if($id<=0||$qty==0)throw new RuntimeException('Enter an inventory item and non-zero adjustment.');
+   $pdo=db();$pdo->beginTransaction();$s=$pdo->prepare('SELECT current_stock FROM inventory WHERE inventory_id=? FOR UPDATE');$s->execute([$id]);$row=$s->fetch();if(!$row)throw new RuntimeException('Inventory item not found.');if((float)$row['current_stock']+$qty<0)throw new RuntimeException('Stock cannot become negative.');$pdo->prepare('UPDATE inventory SET current_stock=? WHERE inventory_id=?')->execute([(float)$row['current_stock']+$qty,$id]);$pdo->prepare("INSERT INTO inventory_transactions(inventory_id,transaction_type,quantity_change,unit_cost,reference_type,notes,created_by) VALUES(?,?,?,?,?,?,?)")->execute([$id,'ADJUSTMENT',$qty,null,'MANUAL',$note,current_user_id()]);$pdo->commit();set_flash('success','Stock adjusted.');
+  }
+ }catch(Throwable $e){if(isset($pdo)&&$pdo instanceof PDO&&$pdo->inTransaction())$pdo->rollBack();set_flash('error',$e->getMessage());}
+ redirect('/SmartCanteenAI/admin/inventory.php');
+}
+$edit=null;$id=(int)($_GET['edit']??0);if($id){$s=db()->prepare('SELECT * FROM inventory WHERE inventory_id=?');$s->execute([$id]);$edit=$s->fetch();}
+$suppliers=db()->query('SELECT supplier_id,supplier_name FROM suppliers WHERE is_active=1 ORDER BY supplier_name')->fetchAll();
+$items=db()->query("SELECT i.*,s.supplier_name,(i.current_stock<=i.minimum_stock) low_stock FROM inventory i LEFT JOIN suppliers s ON s.supplier_id=i.supplier_id ORDER BY i.ingredient_name")->fetchAll();
+include __DIR__.'/../includes/header.php';?>
+<div class="container-fluid py-4"><div class="mb-4"><h1 class="h3">Inventory Management</h1><p class="text-secondary mb-0">Track ingredients, stock thresholds and manual adjustments.</p></div>
+<div class="row g-4"><div class="col-xl-4"><div class="card border-0 shadow-sm"><div class="card-body"><h2 class="h5"><?= $edit?'Edit Ingredient':'Add Ingredient'?></h2><form method="post"><input type="hidden" name="csrf_token" value="<?=e(csrf_token())?>"><input type="hidden" name="action" value="save"><input type="hidden" name="inventory_id" value="<?= (int)($edit['inventory_id']??0) ?>">
+<div class="mb-3"><label class="form-label">Ingredient</label><input class="form-control" name="ingredient_name" required value="<?=e($edit['ingredient_name']??'')?>"></div>
+<div class="mb-3"><label class="form-label">Unit</label><input class="form-control" name="unit" placeholder="kg, litre, pcs" required value="<?=e($edit['unit']??'')?>"></div>
+<div class="row"><div class="col-6 mb-3"><label class="form-label">Current stock</label><input class="form-control" type="number" step="0.001" min="0" name="current_stock" value="<?=e((string)($edit['current_stock']??0))?>"></div><div class="col-6 mb-3"><label class="form-label">Cost/unit</label><input class="form-control" type="number" step="0.01" min="0" name="cost_per_unit" value="<?=e((string)($edit['cost_per_unit']??0))?>"></div></div>
+<div class="row"><div class="col-6 mb-3"><label class="form-label">Minimum</label><input class="form-control" type="number" step="0.001" min="0" name="minimum_stock" value="<?=e((string)($edit['minimum_stock']??0))?>"></div><div class="col-6 mb-3"><label class="form-label">Maximum</label><input class="form-control" type="number" step="0.001" min="0" name="maximum_stock" value="<?=e((string)($edit['maximum_stock']??0))?>"></div></div>
+<div class="mb-3"><label class="form-label">Supplier</label><select class="form-select" name="supplier_id"><option value="">None</option><?php foreach($suppliers as $s):?><option value="<?=$s['supplier_id']?>" <?=((int)($edit['supplier_id']??0)===(int)$s['supplier_id'])?'selected':''?>><?=e($s['supplier_name'])?></option><?php endforeach;?></select></div>
+<div class="form-check mb-3"><input class="form-check-input" type="checkbox" name="is_active" id="ia" <?=!$edit||(int)$edit['is_active']?'checked':''?>><label class="form-check-label" for="ia">Active</label></div><button class="btn btn-primary">Save</button><?php if($edit):?><a class="btn btn-outline-secondary ms-2" href="/SmartCanteenAI/admin/inventory.php">Cancel</a><?php endif;?></form></div></div>
+<div class="card border-0 shadow-sm mt-4"><div class="card-body"><h2 class="h5">Quick Adjustment</h2><form method="post"><input type="hidden" name="csrf_token" value="<?=e(csrf_token())?>"><input type="hidden" name="action" value="adjust"><select class="form-select mb-2" name="inventory_id" required><option value="">Select ingredient</option><?php foreach($items as $i):?><option value="<?=$i['inventory_id']?>"><?=e($i['ingredient_name'])?></option><?php endforeach;?></select><input class="form-control mb-2" type="number" step="0.001" name="quantity_change" placeholder="+10 or -2" required><input class="form-control mb-3" name="notes" placeholder="Reason"><button class="btn btn-outline-primary w-100">Adjust Stock</button></form></div></div></div>
+<div class="col-xl-8"><div class="card border-0 shadow-sm"><div class="card-body"><div class="table-responsive"><table class="table align-middle"><thead><tr><th>Ingredient</th><th>Stock</th><th>Threshold</th><th>Supplier</th><th>Status</th><th></th></tr></thead><tbody><?php foreach($items as $i):?><tr><td><strong><?=e($i['ingredient_name'])?></strong><br><small><?=$i['is_active']?'Active':'Inactive'?></small></td><td><?=number_format((float)$i['current_stock'],2)?> <?=e($i['unit'])?></td><td><?=number_format((float)$i['minimum_stock'],2)?> / <?=number_format((float)$i['maximum_stock'],2)?></td><td><?=e((string)$i['supplier_name'])?></td><td><?=$i['low_stock']?'<span class="badge text-bg-warning">Low stock</span>':'<span class="badge text-bg-success">OK</span>'?></td><td><a class="btn btn-sm btn-outline-primary" href="?edit=<?=$i['inventory_id']?>">Edit</a></td></tr><?php endforeach;?></tbody></table></div></div></div></div></div></div>
+<?php include __DIR__.'/../includes/footer.php';?>

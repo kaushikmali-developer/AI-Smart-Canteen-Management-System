@@ -1,0 +1,2 @@
+Add this line in includes/header.php immediately after swiggy-inspired.css:
+<link href="/SmartCanteenAI/assets/css/menu-images.css" rel="stylesheet">

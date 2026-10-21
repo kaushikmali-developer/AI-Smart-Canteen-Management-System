@@ -1,0 +1,40 @@
+# Secrets and environment configuration
+.env
+.env.*
+!.env.example
+config/database.php
+database.php
+
+# Local databases and backups
+*.sql
+*.sql.zip
+*.sqlite
+*.db
+*.bak
+*.backup
+
+# Local development files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+error_log
+
+# Dependencies and temporary files
+vendor/
+node_modules/
+tmp/
+temp/
+
+# Private setup and diagnostic scripts
+setup_demo_users.php
+tools/setup_demo_users.php
+tools/smoke_test.php
+tools/install_local_food_photos.php
+tools/install_professional_food_photos.php
+tools/menu_image_proxy.php
+admin/error_log_viewer.php
+security/security_check.php
+config/test_database.php
+config/test_database.php
